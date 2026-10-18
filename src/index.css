@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+/* System fonts only: the site makes no third-party requests, like the app.
+   Native Mac Studio look is carried by the warm palette, hairline structure,
+   mono metadata and a single green "leaf" accent — no web fonts needed. */
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Warm graphite ink ramp */
+  --color-ink: #1b1a16;
+  --color-muted: #514d44;
+  --color-subtle: #807a6c;
+  --color-line: rgba(27, 26, 22, 0.12);
+  --color-line-strong: rgba(27, 26, 22, 0.20);
+
+  /* Warm paper surfaces */
+  --color-paper: #f7f4ee;
+  --color-paper-deep: #fbf8f1;
+  --color-surface: #fffdf8;
+  --color-sunken: #ece7dc;
+
+  /* Single confident accent — Paperleaf signature green "leaf" */
+  --color-leaf: #1f7a4d;
+  --color-leaf-ink: #175d3a;
+  --color-leaf-soft: rgba(31, 122, 77, 0.12);
+  --color-leaf-line: rgba(31, 122, 77, 0.32);
+}
+
+/* Dark theme — follow the system unless the user has forced light, plus an
+   explicit [data-theme] override driven by the navbar toggle. Warm dark
+   surfaces, brighter leaf. No third-party requests. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-ink: #f3efe4;
+    --color-muted: #c3bcac;
+    --color-subtle: #8c8575;
+    --color-line: rgba(246, 240, 228, 0.13);
+    --color-line-strong: rgba(246, 240, 228, 0.22);
+    --color-paper: #15140f;
+    --color-paper-deep: #211e17;
+    --color-surface: #1c1a14;
+    --color-sunken: #0d0c09;
+    --color-leaf: #4ade80;
+    --color-leaf-ink: #6ee79f;
+    --color-leaf-soft: rgba(74, 222, 128, 0.15);
+    --color-leaf-line: rgba(74, 222, 128, 0.4);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-ink: #f3efe4;
+  --color-muted: #c3bcac;
+  --color-subtle: #8c8575;
+  --color-line: rgba(246, 240, 228, 0.13);
+  --color-line-strong: rgba(246, 240, 228, 0.22);
+  --color-paper: #15140f;
+  --color-paper-deep: #211e17;
+  --color-surface: #1c1a14;
+  --color-sunken: #0d0c09;
+  --color-leaf: #4ade80;
+  --color-leaf-ink: #6ee79f;
+  --color-leaf-soft: rgba(74, 222, 128, 0.15);
+  --color-leaf-line: rgba(74, 222, 128, 0.4);
+}
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  @apply bg-paper text-ink font-sans antialiased;
+  transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+::selection { background: var(--color-leaf-soft); color: var(--color-ink); }
+
+/* Mono studio status strip */
+.topstrip {
+  border-bottom: 1px solid var(--color-line);
+  background: var(--color-paper-deep);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--color-subtle);
+}
+.topstrip-inner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 34px;
+}
+.topstrip .sep { color: var(--color-line-strong); margin: 0 8px; }
+@media (max-width: 640px) { .topstrip-right { display: none; } }
+
+/* Numbered mono section eyebrows (counter across the page) */
+main { counter-reset: musec; }
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-leaf);
+}
+.section-eyebrow::before {
+  counter-increment: musec;
+  content: counter(musec, decimal-leading-zero);
+  color: var(--color-subtle);
+  border: 1px solid var(--color-line-strong);
+  border-radius: 5px;
+  padding: 2px 7px;
+  font-size: 11px;
+}
+
+/* Accent underline marker — wrap-safe (clones across lines) */
+.title-highlight {
+  background-image:
+    linear-gradient(var(--color-leaf), var(--color-leaf)),
+    linear-gradient(var(--color-leaf-soft), var(--color-leaf-soft));
+  background-repeat: no-repeat, no-repeat;
+  background-position: 0 100%, 0 94%;
+  background-size: 100% 2px, 100% 0.32em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
